@@ -24,7 +24,7 @@ const ExpiredToken: React.FC<Props> = ({
             key={id}
             style={{
                 backgroundColor: 'white',
-                height: 120,
+                height: 130,
                 width: 280,
                 paddingVertical: 10,
                 paddingHorizontal: 10,
@@ -47,28 +47,39 @@ const ExpiredToken: React.FC<Props> = ({
                     <Text
                         style={{
                             color: 'black',
-                            fontSize: 18,
+                            fontSize: 22,
                             marginBottom: 10,
                             paddingRight: 20,
+                            fontWeight: 'bold',
                         }}>
                         {platform}
                     </Text>
 
-                    <Text style={{ fontSize: 10 }}>{url}</Text>
+                    <Text style={{ fontSize: 12 }}>{url}</Text>
                 </View>
 
-                {/* <FontAwesome name="ellipsis-v" size={20} /> */}
+                {/* <FontAwesome name="rotate-right" size={16} /> */}
             </View>
 
-            <Text style={{ fontSize: 11, marginBottom: 5 }}>
-                Token: {token}
+            <Text
+                style={{
+                    fontSize: 13,
+                    marginBottom: 5,
+                    color: 'black',
+                    textDecorationLine: 'underline',
+                    fontStyle: 'italic',
+                }}>
+                {token}
             </Text>
 
-            <Text style={{ fontSize: 11, marginBottom: 5 }}>
-                Last Accessed: {accessDate}
+            <Text style={{ fontSize: 13, marginBottom: 5 }}>
+                <Text style={{ color: 'black' }}>Last Accessed:</Text>{' '}
+                {accessDate}
             </Text>
 
-            <Text style={{ fontSize: 11 }}>Expired: {expires}</Text>
+            <Text style={{ fontSize: 13 }}>
+                <Text style={{ color: 'black' }}>Expired:</Text> {expires}
+            </Text>
         </View>
     )
 }

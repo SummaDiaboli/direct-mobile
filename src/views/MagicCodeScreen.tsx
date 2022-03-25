@@ -95,7 +95,7 @@ const MagicCodeScreen: React.FC<Props> = ({ navigation, route }: Props) => {
             .then(res => {
                 console.log(res.data)
                 if (res.status !== 200) {
-                    console.log('Invalid token')
+                    // console.log('Invalid token')
                     setIsInvalid(true)
                     setErrorText('Invalid code. Please verify and try again')
                 } else {

@@ -3,10 +3,11 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Home from './views/HomeScreen'
-import { HOME, LOGIN, MAGIC, RootStackParamList, SIGNUP } from './utils/routes'
+import { HOME, LOGIN, MAGIC, RootStackParamList, SETTINGS, SIGNUP } from './utils/routes'
 import Login from './views/LoginScreen'
 import SignUpScreen from './views/SignUpScreen'
 import MagicCodeScreen from './views/MagicCodeScreen'
+import SettingsScreen from './views/SettingsScreen'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -35,6 +36,10 @@ const App = () => {
                     name={MAGIC}
                     component={MagicCodeScreen}
                     options={{ animation: 'slide_from_bottom' }}
+                />
+                <Stack.Screen
+                    name={SETTINGS}
+                    component={SettingsScreen}
                 />
             </Stack.Navigator>
         </NavigationContainer>

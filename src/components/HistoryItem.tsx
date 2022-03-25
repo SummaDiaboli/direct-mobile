@@ -9,15 +9,17 @@ type Props = {
     expires: string
     platform?: string
     url?: string
+    isExpired: boolean
 }
 
-const ActiveToken: React.FC<Props> = ({
+const HistoryItem: React.FC<Props> = ({
     id,
     token,
     accessDate,
     expires,
     platform,
     url,
+    isExpired,
 }: Props) => {
     return (
         <View
@@ -25,10 +27,11 @@ const ActiveToken: React.FC<Props> = ({
             style={{
                 backgroundColor: 'white',
                 height: 130,
-                width: 280,
                 paddingVertical: 10,
                 paddingHorizontal: 10,
-                marginRight: 10,
+                marginHorizontal: 6,
+                marginBottom: 10,
+                elevation: 3,
                 borderRadius: 10,
                 // width: '5%',
             }}>
@@ -50,7 +53,7 @@ const ActiveToken: React.FC<Props> = ({
                             fontSize: 22,
                             marginBottom: 10,
                             paddingRight: 20,
-                            fontWeight: 'bold'
+                            fontWeight: 'bold',
                         }}>
                         {platform}
                     </Text>
@@ -58,7 +61,9 @@ const ActiveToken: React.FC<Props> = ({
                     <Text style={{ fontSize: 12 }}>{url}</Text>
                 </View>
 
-                <FontAwesome name="rotate-right" size={16} />
+                {!isExpired ? (
+                    <FontAwesome name="rotate-right" size={16} />
+                ) : null}
             </View>
 
             <Text
@@ -78,7 +83,10 @@ const ActiveToken: React.FC<Props> = ({
             </Text>
 
             <Text style={{ fontSize: 13 }}>
-                <Text style={{ color: 'black' }}>Expires:</Text> {expires}
+                <Text style={{ color: 'black' }}>
+                    Expire{isExpired ? 'd' : 's'}:
+                </Text>{' '}
+                {expires}
             </Text>
         </View>
     )
@@ -86,4 +94,4 @@ const ActiveToken: React.FC<Props> = ({
 
 const styles = StyleSheet.create({})
 
-export default ActiveToken
+export default HistoryItem

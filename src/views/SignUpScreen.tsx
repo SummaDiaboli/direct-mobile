@@ -125,6 +125,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }: Props) => {
                     <TextInput
                         onChangeText={setEmail}
                         value={email}
+                        keyboardType={"email-address"}
                         style={styles.inputField}
                     />
                     <Text

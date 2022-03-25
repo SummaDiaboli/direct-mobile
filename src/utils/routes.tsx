@@ -2,6 +2,7 @@ const HOME = 'Home'
 const LOGIN = 'Login'
 const SIGNUP = 'Sign Up'
 const MAGIC = 'Magic Code'
+const SETTINGS = 'Settings'
 
 type LoginResponse = {
     username: string
@@ -14,6 +15,7 @@ type RootStackParamList = {
     Login: undefined
     'Sign Up': undefined
     'Magic Code': { id: string }
+    Settings: { data: LoginResponse }
 }
 
 type BottomTabParamList = {
@@ -27,6 +29,7 @@ export {
     LOGIN,
     SIGNUP,
     MAGIC,
+    SETTINGS,
     type RootStackParamList,
     type LoginResponse,
     type BottomTabParamList,

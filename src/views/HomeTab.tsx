@@ -82,41 +82,59 @@ const HomeTab = () => {
     return (
         <View style={styles.container}>
             <Header
+                
                 username={userData.username}
                 email={userData.email}
                 id={userData.id}
             />
 
-            <ScrollView style={{ paddingVertical: '2%', marginBottom: '18%' }}>
+            <ScrollView
+                style={{
+                    minHeight: '100%',
+                    paddingVertical: '2%',
+                    marginBottom: '18%',
+                }}>
                 <View style={{ marginBottom: 10 }}>
-                    <View
-                        style={[
-                            styles.content,
-                            { flexDirection: 'row', alignItems: 'center' },
-                        ]}>
-                        <Text
+                    <View style={styles.content}>
+                        <View
                             style={{
-                                color: 'black',
-                                textTransform: 'uppercase',
-                                fontSize: 18,
+                                backgroundColor: 'white',
+                                height: 120,
+                                borderRadius: 10,
+                                paddingHorizontal: 10,
                             }}>
-                            Profile
-                        </Text>
-                        <FontAwesome
-                            name="angle-right"
-                            size={18}
-                            style={{ marginLeft: 5 }}
-                            color={'black'}
-                        />
-                    </View>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}>
+                                <Text
+                                    style={{
+                                        fontWeight: 'bold',
+                                        fontSize: 20,
+                                        color: 'black',
+                                        paddingVertical: 10,
+                                    }}>
+                                    Profile
+                                </Text>
 
-                    <View
-                        style={{
-                            backgroundColor: 'white',
-                            height: 200,
-                            marginHorizontal: 20,
-                            borderRadius: 10,
-                        }}></View>
+                                <FontAwesome name="pencil" size={20} />
+                            </View>
+                            <Text style={{ color: 'black', marginBottom: 10 }}>
+                                ID:{' '}
+                                <Text style={{ color: 'gray' }}>
+                                    {userData.id}
+                                </Text>
+                            </Text>
+                            <Text style={{ color: 'black' }}>
+                                Email:{' '}
+                                <Text style={{ color: 'gray' }}>
+                                    {userData.email}
+                                </Text>
+                            </Text>
+                        </View>
+                    </View>
                 </View>
 
                 <View style={{ marginBottom: 10 }}>
@@ -130,6 +148,7 @@ const HomeTab = () => {
                                 color: 'black',
                                 textTransform: 'uppercase',
                                 fontSize: 18,
+                                fontWeight: '500',
                             }}>
                             Recent Active Tokens
                         </Text>
@@ -163,6 +182,7 @@ const HomeTab = () => {
                                 color: 'black',
                                 textTransform: 'uppercase',
                                 fontSize: 18,
+                                fontWeight: '500',
                             }}>
                             Recent Expired Tokens
                         </Text>
