@@ -12,7 +12,7 @@ const QRTab = () => {
     const [scanned, setScanned] = useState(false)
 
     const onSuccess = (e: any) => {
-        console.log(e)
+        // console.log(e)
         setScanText("Code Identified. Scanning...")
         setScanned(true)
         axios
