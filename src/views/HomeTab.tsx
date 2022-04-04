@@ -5,9 +5,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { UserDataContext } from '../contexts/UserDataContext'
 import ActiveToken from '../components/ActiveToken'
 import ExpiredToken from '../components/ExpiredToken'
+import { useNavigation } from '@react-navigation/native'
 
 const HomeTab = () => {
     const userData = useContext(UserDataContext)
+    const navigation = useNavigation<any>()
+    const navigateToEdit = () => {
+        navigation.navigate('Edit Profile', { data: userData })
+    }
 
     const activeTokens = [
         {
@@ -82,7 +87,6 @@ const HomeTab = () => {
     return (
         <View style={styles.container}>
             <Header
-                
                 username={userData.username}
                 email={userData.email}
                 id={userData.id}
@@ -119,7 +123,11 @@ const HomeTab = () => {
                                     Profile
                                 </Text>
 
-                                <FontAwesome name="pencil" size={20} />
+                                <FontAwesome
+                                    onPress={navigateToEdit}
+                                    name="pencil"
+                                    size={20}
+                                />
                             </View>
                             <Text style={{ color: 'black', marginBottom: 10 }}>
                                 ID:{' '}
@@ -163,6 +171,7 @@ const HomeTab = () => {
 
                     <View style={styles.content}>
                         <FlatList
+                            showsHorizontalScrollIndicator={false}
                             data={activeTokens}
                             keyExtractor={item => item.id}
                             horizontal
@@ -196,6 +205,7 @@ const HomeTab = () => {
 
                     <View style={styles.content}>
                         <FlatList
+                            showsHorizontalScrollIndicator={false}
                             data={expiredTokens}
                             keyExtractor={item => item.id}
                             horizontal

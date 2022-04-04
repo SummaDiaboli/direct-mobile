@@ -112,9 +112,10 @@ const HistoryTab = () => {
                     },
                 ]}>
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     refreshing={isRefreshing}
                     onRefresh={refreshHistory}
-                    style={{ marginBottom: '36%', marginTop: '3%' }}
+                    style={{ marginBottom: '32%', marginTop: '3%' }}
                     data={userHistory}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => <HistoryItem {...item} />}
