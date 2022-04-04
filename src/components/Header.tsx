@@ -15,7 +15,7 @@ const Header: React.FC<Props> = ({ username, email, id }: Props) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>{username}</Text>
+            <Text style={styles.text}>Hi, {username}</Text>
             <Ionicon
                 name="settings-outline"
                 size={20}
