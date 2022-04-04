@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { BottomTabParamList, RootStackParamList } from '../utils/routes'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -9,19 +9,50 @@ import HomeTab from './HomeTab'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import QRTab from './QRTab'
 import { View } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 // import { createDrawerNavigator } from '@react-navigation/drawer'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>
 const Tab = createBottomTabNavigator<BottomTabParamList>()
 // const Drawer = createDrawerNavigator()
 
-const HomeScreen: React.FC<Props> = ({ route }: Props) => {
+type UserData = {
+    username: string
+    email: string
+    id: string
+}
+
+const HomeScreen: React.FC<Props> = ({ route, }: Props) => {
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [id, setId] = useState('')
+
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('userData')
+            const userData: UserData = value !== null ? JSON.parse(value) : null
+            setUsername(userData.username ?? '')
+            setEmail(userData.email ?? '')
+            setId(userData.id ?? '')
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
+
     return (
         <UserDataContext.Provider
             value={{
-                username: route.params.data.username,
-                email: route.params.data.email,
-                id: route.params.data.id,
+                // username: route.params.data.username,
+                // email: route.params.data.email,
+                // id: route.params.data.id,
+                username,
+                email,
+                id,
             }}>
             {/* <Drawer.Navigator> */}
             <Tab.Navigator
