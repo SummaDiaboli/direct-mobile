@@ -16,7 +16,7 @@ const QRTab = () => {
         setScanText("Code Identified. Scanning...")
         setScanned(true)
         axios
-            .post('http://10.3.128.220:8080/api/confirm-qr', {
+            .post('http://10.3.128.231:8080/api/confirm-qr', {
                 user_id: userData.id,
                 token: e.data,
             })

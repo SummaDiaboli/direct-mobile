@@ -88,7 +88,7 @@ const MagicCodeScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         // console.log(code);
         // console.log(id);
         axios
-            .post('http://10.3.128.220:8080/api/confirm-token', {
+            .post('http://10.3.128.231:8080/api/confirm-token', {
                 user_id: id,
                 token: code,
             })

@@ -9,9 +9,10 @@ import {
     ActivityIndicator,
     ScrollView,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../utils/routes'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>
@@ -23,6 +24,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
     const [isError, setIsError] = useState(false)
     const [errorText, setErrorText] = useState('')
 
+    // const textRef = useRef<TextInput>(null)
+
     const noAccountClicked = () => {
         navigation.navigate('Sign Up')
     }
@@ -33,10 +36,12 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
         if (username.length > 0) {
             setIsLoading(true)
             axios
-                .get(`http://10.3.128.220:8080/api/login/${username}`)
-                .then(res => {
+                .get(`http://10.3.128.231:8080/api/login/${username}`)
+                .then(async res => {
                     console.log(res.data)
                     const id = res.data.id
+                    setUsername('')
+                    await AsyncStorage.setItem('userData', JSON.stringify(res.data))
                     // TODO: Use another means of verification for login
                     // navigation.navigate("Magic Code", {id})
                     navigation.navigate('Home', { data: res.data })
@@ -79,6 +84,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                         </Text>
                     </Text>
                     <TextInput
+                        // ref={textRef}
                         onChangeText={setUsername}
                         value={username}
                         style={styles.inputField}

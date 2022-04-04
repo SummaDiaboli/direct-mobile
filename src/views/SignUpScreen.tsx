@@ -40,7 +40,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }: Props) => {
         if (username.length > 0 && email.length > 0) {
             setIsLoading(true)
             axios
-                .post('http://10.3.128.220:8080/api/users', {
+                .post('http://10.3.128.231:8080/api/users', {
                     username,
                     email,
                     // "website": "Direct Security Official"
