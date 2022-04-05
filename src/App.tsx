@@ -22,19 +22,22 @@ import ActiveDevicesScreen from './views/ActiveDevicesScreen'
 import EditProfileScreen from './views/EditProfileScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { View } from 'react-native'
+import { authenticateWithBiometrics } from './utils/Biometrics'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const App = () => {
     const [loggedIn, setLoggedIn] = useState(false)
     const [loading, setLoading] = useState(true)
+    const [authed, setAuthed] = useState(false)
     // let loggedIn = false
 
     const getLogin = useCallback(
         async () =>
-            await AsyncStorage.getItem('userData').then(userData => {
+            await AsyncStorage.getItem('userData').then(async userData => {
                 if (userData !== null) {
-                    setLoggedIn(true)
+                    // setLoggedIn(true)
+                    await getSettings()
                     // console.log({userData, loggedIn, loading})
                     // console.log({loggedIn})
                 } else {
@@ -45,9 +48,45 @@ const App = () => {
         [],
     )
 
+    const getSettings = useCallback(
+        async () =>
+            await AsyncStorage.getItem('userSettings').then(
+                async userSettings => {
+                    if (userSettings !== null) {
+                        const userSettingsObj = JSON.parse(userSettings)
+                        if (
+                            userSettingsObj.isBiometricsActive !== undefined &&
+                            userSettingsObj.isBiometricsActive
+                        ) {
+                            // console.log('Scan fingerprint')
+                            await authenticateWithBiometrics().then(
+                                async res => {
+                                    if (res) {
+                                        setLoggedIn(true)
+                                        // console.log('loggedIn')
+                                    } else {
+                                        // console.log('nope')
+                                        setLoggedIn(false)
+                                        await AsyncStorage.removeItem(
+                                            'userSettings',
+                                        )
+                                    }
+                                },
+                            )
+                        } else {
+                            setLoggedIn(true)
+                        }
+                        setAuthed(true)
+                    } else {
+                        setLoggedIn(true)
+                    }
+                },
+            ),
+        [],
+    )
+
     React.useEffect(() => {
-        // console.log('loading', loading)
-        getLogin()
+        !authed ? getLogin() : null
         loading ? null : SplashScreen.hide()
     }, [loading])
 

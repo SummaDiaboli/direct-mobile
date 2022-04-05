@@ -6,7 +6,7 @@ import {
     Text,
     View,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import {
     ACTIVE_DEVICES,
@@ -16,6 +16,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { authenticateWithBiometrics } from '../utils/Biometrics'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Settings'>
 
@@ -27,11 +28,42 @@ type Button = {
     onClick: () => void
 }
 
+type Settings = {
+    isBiometricsActive: boolean
+    isMultiAccessActive: boolean
+    isPinActive: boolean
+}
+
 const SettingsScreen: React.FC<Props> = ({ navigation, route }: Props) => {
+    // console.log(userDefaultSettings)
     const [isBiometricsActive, setIsBiometricsActive] = useState(false)
     const [isPinActive, setIsPinActive] = useState(false)
     const [isMultiAccessActive, setIsMultiAccessActive] = useState(false)
     // console.log(route.params.data)
+
+    const getSettings = async () => {
+        const userDefaultSettings = await AsyncStorage.getItem('userSettings')
+        const settingsObject = userDefaultSettings
+            ? JSON.parse(userDefaultSettings)
+            : null
+        // console.log(settingsObject)
+        if (settingsObject) {
+            setIsBiometricsActive(settingsObject.isBiometricsActive)
+            setIsPinActive(settingsObject.isPinActive)
+            setIsMultiAccessActive(settingsObject.isMultiAccessActive)
+        }
+    }
+
+    const saveSettings = async () => {
+        await AsyncStorage.setItem(
+            'userSettings',
+            JSON.stringify({
+                isBiometricsActive,
+                isMultiAccessActive,
+                isPinActive,
+            }),
+        )
+    }
 
     const accountButtons: Button[] = [
         {
@@ -53,6 +85,7 @@ const SettingsScreen: React.FC<Props> = ({ navigation, route }: Props) => {
             icon: 'log-out',
             onClick: () => {
                 AsyncStorage.removeItem('userData')
+                AsyncStorage.removeItem('userSettings')
                 navigation.navigate('Login')
             },
         },
@@ -66,6 +99,11 @@ const SettingsScreen: React.FC<Props> = ({ navigation, route }: Props) => {
             isActive: isBiometricsActive,
             onClick: () => {
                 setIsBiometricsActive(!isBiometricsActive)
+                !isBiometricsActive
+                    ? authenticateWithBiometrics().then(res =>
+                          !res ? setIsBiometricsActive(false) : null,
+                      )
+                    : null
             },
         },
         {
@@ -97,9 +135,20 @@ const SettingsScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         },
     ]
 
+    useEffect(() => {}, [isBiometricsActive])
+
+    useEffect(() => {
+        getSettings()
+    }, [])
+
+    useEffect(() => {
+        saveSettings()
+    }, [isBiometricsActive, isMultiAccessActive, isPinActive])
+
     return (
         <SafeAreaView>
             <ScrollView style={styles.container}>
+                {/* Account */}
                 <View style={{ marginBottom: '5%' }}>
                     <Text style={styles.title}>Account</Text>
                     <View style={{ marginTop: '5%' }}>
@@ -129,6 +178,7 @@ const SettingsScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                     </View>
                 </View>
 
+                {/* Security */}
                 <View style={{ marginBottom: '5%' }}>
                     <Text style={styles.title}>Security</Text>
                     <View style={{ marginTop: '5%' }}>
@@ -173,6 +223,7 @@ const SettingsScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                     </View>
                 </View>
 
+                {/* Miscellaneous */}
                 <View style={{ marginBottom: '5%' }}>
                     <Text style={styles.title}>Security</Text>
                     <View style={{ marginTop: '5%' }}>

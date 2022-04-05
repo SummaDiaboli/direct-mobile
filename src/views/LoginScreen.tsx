@@ -41,13 +41,17 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                     console.log(res.data)
                     const id = res.data.id
                     setUsername('')
-                    await AsyncStorage.setItem('userData', JSON.stringify(res.data))
-                    // TODO: Use another means of verification for login
-                    // navigation.navigate("Magic Code", {id})
-                    navigation.navigate('Home', { data: res.data })
-                    // navigation.navigate("Home Tabs", )
-                    setIsLoading(false)
-                    setIsError(false)
+                    await AsyncStorage.setItem(
+                        'userData',
+                        JSON.stringify(res.data),
+                    ).then(() => {
+                        // TODO: Use another means of verification for login
+                        // navigation.navigate("Magic Code", {id})
+                        setIsLoading(false)
+                        setIsError(false)
+                        navigation.navigate('Home', { data: res.data })
+                        // navigation.navigate("Home Tabs", )
+                    })
                 })
                 .catch(err => {
                     console.log(err)
