@@ -37,9 +37,29 @@ const authenticateWithBiometrics = async () => {
     }
 }
 
+const authenticateWithBiometricsWithoutFallback = async () => {
+    if (
+        (await getSupportedBiometricDevices()) &&
+        (await checkBiometricActive()) &&
+        (await checkAvailableBiometricTypes())
+    ) {
+        const res = await LocalAuthentication.authenticateAsync({
+            disableDeviceFallback: true,
+            promptMessage: 'Confirm your identity',
+            cancelLabel: 'Cancel',
+            //   fallbackLabel: 'Use password',
+        })
+        if (res.success) {
+            return true
+        }
+        return false
+    }
+}
+
 export {
     authenticateWithBiometrics,
     getSupportedBiometricDevices,
     checkBiometricActive,
     checkAvailableBiometricTypes,
+    authenticateWithBiometricsWithoutFallback,
 }
