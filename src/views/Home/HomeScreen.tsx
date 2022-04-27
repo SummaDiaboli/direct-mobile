@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { BottomTabParamList, RootStackParamList } from '../utils/routes'
+import { BottomTabParamList, RootStackParamList } from '../../utils/routes'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { UserDataContext } from '../contexts/UserDataContext'
+import { UserDataContext } from '../../contexts/UserDataContext'
+import { View } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import HistoryTab from './HistoryTab'
 import HomeTab from './HomeTab'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import QRTab from './QRTab'
-import { View } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // import { createDrawerNavigator } from '@react-navigation/drawer'
 
@@ -23,10 +23,16 @@ type UserData = {
     id: string
 }
 
-const HomeScreen: React.FC<Props> = ({ route, }: Props) => {
-    const [username, setUsername] = useState('')
-    const [email, setEmail] = useState('')
-    const [id, setId] = useState('')
+const HomeScreen: React.FC<Props> = ({ route }: Props) => {
+    const [username, setUsername] = useState(
+        route.params?.data ? route.params.data.username : '',
+    )
+    const [email, setEmail] = useState(
+        route.params?.data ? route.params.data.email : '',
+    )
+    const [id, setId] = useState(
+        route.params?.data ? route.params.data.id : '',
+    )
 
     const getData = async () => {
         try {
@@ -42,6 +48,7 @@ const HomeScreen: React.FC<Props> = ({ route, }: Props) => {
 
     useEffect(() => {
         getData()
+        // getData()
     }, [])
 
     return (

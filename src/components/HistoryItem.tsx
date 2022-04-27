@@ -1,32 +1,39 @@
 import { StyleSheet, Text, View } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import React from 'react'
+// import DateTime from 'luxon'
+import moment from 'moment-timezone'
 
 type Props = {
     id: string
     token: string
-    accessDate: string
+    created: string
     expires: string
-    platform?: string
-    url?: string
-    isExpired: boolean
+    // platform?: string
+    // url?: string
+    // isExpired: boolean
+    referer: string
 }
 
 const HistoryItem: React.FC<Props> = ({
     id,
     token,
-    accessDate,
+    created,
     expires,
-    platform,
-    url,
-    isExpired,
-}: Props) => {
+    referer,
+}: // platform,
+// url,
+// isExpired,
+Props) => {
+    const isExpired = new Date(expires) < new Date(Date.now())
+    // console.log({isExpired})
+
     return (
         <View
             key={id}
             style={{
                 backgroundColor: 'white',
-                height: 130,
+                // minHeight: 130,
                 paddingVertical: 10,
                 paddingHorizontal: 10,
                 marginHorizontal: 6,
@@ -55,10 +62,10 @@ const HistoryItem: React.FC<Props> = ({
                             paddingRight: 20,
                             fontWeight: 'bold',
                         }}>
-                        {platform}
+                        {referer}
                     </Text>
 
-                    <Text style={{ fontSize: 12 }}>{url}</Text>
+                    {/* <Text style={{ fontSize: 12 }}>{url}</Text> */}
                 </View>
 
                 {!isExpired ? (
@@ -68,7 +75,7 @@ const HistoryItem: React.FC<Props> = ({
 
             <Text
                 style={{
-                    fontSize: 13,
+                    fontSize: 10,
                     marginBottom: 5,
                     color: 'black',
                     textDecorationLine: 'underline',
@@ -79,14 +86,14 @@ const HistoryItem: React.FC<Props> = ({
 
             <Text style={{ fontSize: 13, marginBottom: 5 }}>
                 <Text style={{ color: 'black' }}>Last Accessed:</Text>{' '}
-                {accessDate}
+                {moment(created).format('DD MMMM YYYY')}
             </Text>
 
             <Text style={{ fontSize: 13 }}>
                 <Text style={{ color: 'black' }}>
                     Expire{isExpired ? 'd' : 's'}:
                 </Text>{' '}
-                {expires}
+                {moment(expires).format('DD MMMM YYYY')}
             </Text>
         </View>
     )

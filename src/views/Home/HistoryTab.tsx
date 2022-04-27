@@ -1,14 +1,26 @@
 import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useContext, useState } from 'react'
-import { UserDataContext } from '../contexts/UserDataContext'
-import Header from '../components/Header'
-import ActiveToken from '../components/ActiveToken'
-import ExpiredToken from '../components/ExpiredToken'
-import HistoryItem from '../components/HistoryItem'
+import React, { useContext, useEffect, useState } from 'react'
+import { UserDataContext } from '../../contexts/UserDataContext'
+import Header from '../../components/Header'
+import ActiveToken from '../../components/ActiveToken'
+import ExpiredToken from '../../components/ExpiredToken'
+import HistoryItem from '../../components/HistoryItem'
+import axios from 'axios'
+
+type AuthToken = {
+    id: string
+    token: string
+    user_id: string
+    referer: string
+    created: string
+    expires: string
+}
 
 const HistoryTab = () => {
     const userData = useContext(UserDataContext)
     const [isRefreshing, setIsRefreshing] = useState(false)
+    const [history, setHistory] = useState<AuthToken[]>([])
+    const [isError, setIsError] = useState(false)
 
     const userHistory = [
         {
@@ -86,8 +98,28 @@ const HistoryTab = () => {
     ]
 
     const refreshHistory = () => {
-        console.log('refreshing')
+        // console.log('refreshing')
+        fetchHistory()
     }
+
+    const fetchHistory = () => {
+        axios
+            .get(`http://10.3.128.231:8080/api/authed-websites/${userData.id}`)
+            .then(res => {
+                if (res.status !== 200) {
+                    setIsError(true)
+                } else {
+                    console.log(res.data)
+                    const responseData = res.data
+                    setHistory(responseData.websites)
+                }
+                console.log(history)
+            })
+    }
+
+    useEffect(() => {
+        fetchHistory()
+    }, [])
 
     return (
         <View style={styles.container}>
@@ -116,9 +148,11 @@ const HistoryTab = () => {
                     refreshing={isRefreshing}
                     onRefresh={refreshHistory}
                     style={{ marginBottom: '32%', marginTop: '3%' }}
-                    data={userHistory}
+                    data={history}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => <HistoryItem {...item} />}
+                    extraData={history}
+                    ListEmptyComponent={<Text>Could not find history</Text>}
                 />
             </View>
             {/* </ScrollView> */}

@@ -1,10 +1,10 @@
 import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useContext } from 'react'
-import Header from '../components/Header'
+import Header from '../../components/Header'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { UserDataContext } from '../contexts/UserDataContext'
-import ActiveToken from '../components/ActiveToken'
-import ExpiredToken from '../components/ExpiredToken'
+import { UserDataContext } from '../../contexts/UserDataContext'
+import ActiveToken from '../../components/ActiveToken'
+import ExpiredToken from '../../components/ExpiredToken'
 import { useNavigation } from '@react-navigation/native'
 
 const HomeTab = () => {
