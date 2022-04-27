@@ -2,7 +2,7 @@
 import React, { useCallback, useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Home from './views/HomeScreen'
+import Home from './views/Home/HomeScreen'
 import {
     ACTIVE_DEVICES,
     EDIT_PROFILE,
@@ -16,13 +16,16 @@ import {
 import Login from './views/LoginScreen'
 import SignUpScreen from './views/SignUpScreen'
 import MagicCodeScreen from './views/MagicCodeScreen'
-import SettingsScreen from './views/SettingsScreen'
+import SettingsScreen from './views/Settings/SettingsScreen'
 import SplashScreen from 'react-native-splash-screen'
-import ActiveDevicesScreen from './views/ActiveDevicesScreen'
-import EditProfileScreen from './views/EditProfileScreen'
+import ActiveDevicesScreen from './views/Settings/ActiveDevicesScreen'
+import EditProfileScreen from './views/Settings/EditProfileScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { View } from 'react-native'
-import { authenticateWithBiometrics } from './utils/Biometrics'
+import {
+    authenticateWithBiometrics,
+    authenticateWithBiometricsWithoutFallback,
+} from './utils/Biometrics'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -56,7 +59,9 @@ const App = () => {
                         const userSettingsObj = JSON.parse(userSettings)
                         if (
                             userSettingsObj.isBiometricsActive !== undefined &&
-                            userSettingsObj.isBiometricsActive
+                            userSettingsObj.isBiometricsActive &&
+                            userSettingsObj.isFallbackActive !== undefined &&
+                            userSettingsObj.isFallbackActive
                         ) {
                             // console.log('Scan fingerprint')
                             await authenticateWithBiometrics().then(
@@ -67,6 +72,33 @@ const App = () => {
                                     } else {
                                         // console.log('nope')
                                         setLoggedIn(false)
+                                        await AsyncStorage.removeItem(
+                                            'userData',
+                                        )
+                                        await AsyncStorage.removeItem(
+                                            'userSettings',
+                                        )
+                                    }
+                                },
+                            )
+                        } else if (
+                            userSettingsObj.isBiometricsActive !== undefined &&
+                            userSettingsObj.isBiometricsActive &&
+                            userSettingsObj.isFallbackActive !== undefined &&
+                            !userSettingsObj.isFallbackActive
+                        ) {
+                            // console.log('Scan fingerprint')
+                            await authenticateWithBiometricsWithoutFallback().then(
+                                async res => {
+                                    if (res) {
+                                        setLoggedIn(true)
+                                        // console.log('loggedIn')
+                                    } else {
+                                        // console.log('nope')
+                                        setLoggedIn(false)
+                                        await AsyncStorage.removeItem(
+                                            'userData',
+                                        )
                                         await AsyncStorage.removeItem(
                                             'userSettings',
                                         )

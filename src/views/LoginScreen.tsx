@@ -37,22 +37,34 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
             setIsLoading(true)
             axios
                 .get(`http://10.3.128.231:8080/api/login/${username}`)
-                .then(async res => {
-                    console.log(res.data)
-                    const id = res.data.id
-                    setUsername('')
-                    await AsyncStorage.setItem(
-                        'userData',
-                        JSON.stringify(res.data),
-                    ).then(() => {
-                        // TODO: Use another means of verification for login
-                        // navigation.navigate("Magic Code", {id})
-                        setIsLoading(false)
-                        setIsError(false)
-                        navigation.navigate('Home', { data: res.data })
-                        // navigation.navigate("Home Tabs", )
-                    })
-                })
+                .then(
+                    /*async*/ res => {
+                        console.log(res.data)
+                        if (res.status === 200) {
+                            // navigator(`${Routes.SIGNUP}/${res.data.id}`);
+                            console.log(res.data)
+                            navigation.navigate('Magic Code', {
+                                id: res.data.id,
+                            })
+                            setIsLoading(false)
+                            setIsError(false)
+                        }
+                        // console.log(res.data)
+                        // // const id = res.data.id
+                        // setUsername('')
+                        // await AsyncStorage.setItem(
+                        //     'userData',
+                        //     JSON.stringify(res.data),
+                        // ).then(() => {
+                        //     // TODO: Use another means of verification for login
+                        //     // navigation.navigate("Magic Code", {id})
+                        //     setIsLoading(false)
+                        //     setIsError(false)
+                        //     navigation.navigate('Home', { data: res.data })
+                        //     // navigation.navigate("Home Tabs", )
+                        // })
+                    },
+                )
                 .catch(err => {
                     console.log(err)
                     setIsLoading(false)
