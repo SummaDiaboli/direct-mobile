@@ -1,4 +1,16 @@
 {
   "name": "directmobile",
-  "displayName": "Direct Security"
+  "displayName": "Direct Security",
+  "android": {
+    "package": "com.direct.security"
+  },
+  "expo": {
+    "name": "directmobile",
+    "slug": "direct-mobile",
+    "sdkVersion": "38.0.0",
+    "android": {
+      "package": "com.summadiaboli.directmobile"
+    }
+    
+  }
 }
