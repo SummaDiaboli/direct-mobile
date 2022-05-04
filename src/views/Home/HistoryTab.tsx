@@ -22,80 +22,80 @@ const HistoryTab = () => {
     const [history, setHistory] = useState<AuthToken[]>([])
     const [isError, setIsError] = useState(false)
 
-    const userHistory = [
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad5abb28ba',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Google',
-            url: 'www.google.com',
-            isExpired: false,
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad5abb28b',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Reddit',
-            url: 'www.reddit.com',
-            isExpired: false,
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad5abb28a',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Youtube',
-            url: 'www.youtube.com',
-            isExpired: false,
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad5abb2ba',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'LinkedIn',
-            url: 'www.linkedin.com',
-            isExpired: false,
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad5abb8ba',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Instagram',
-            url: 'www.instagram.com',
-            isExpired: true,
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad5ab28ba',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Tiktok',
-            url: 'www.tiktok.com',
-            isExpired: true,
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3adabb28ba',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Zoom',
-            url: 'www.zoom.com',
-            isExpired: true,
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3a5abb28ba',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Spotify',
-            url: 'www.spotify.com',
-            isExpired: true,
-        },
-    ]
+    // const userHistory = [
+    //     {
+    //         id: 'bd7acbea-c1b1-46c2-aed5-3ad5abb28ba',
+    //         token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    //         accessDate: '1/3/2022 3:06 PM GMT+1',
+    //         expires: '3/3/2022 3:06 PM GMT+1',
+    //         platform: 'Google',
+    //         url: 'www.google.com',
+    //         isExpired: false,
+    //     },
+    //     {
+    //         id: 'bd7acbea-c1b1-46c2-aed5-3ad5abb28b',
+    //         token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    //         accessDate: '1/3/2022 3:06 PM GMT+1',
+    //         expires: '3/3/2022 3:06 PM GMT+1',
+    //         platform: 'Reddit',
+    //         url: 'www.reddit.com',
+    //         isExpired: false,
+    //     },
+    //     {
+    //         id: 'bd7acbea-c1b1-46c2-aed5-3ad5abb28a',
+    //         token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    //         accessDate: '1/3/2022 3:06 PM GMT+1',
+    //         expires: '3/3/2022 3:06 PM GMT+1',
+    //         platform: 'Youtube',
+    //         url: 'www.youtube.com',
+    //         isExpired: false,
+    //     },
+    //     {
+    //         id: 'bd7acbea-c1b1-46c2-aed5-3ad5abb2ba',
+    //         token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    //         accessDate: '1/3/2022 3:06 PM GMT+1',
+    //         expires: '3/3/2022 3:06 PM GMT+1',
+    //         platform: 'LinkedIn',
+    //         url: 'www.linkedin.com',
+    //         isExpired: false,
+    //     },
+    //     {
+    //         id: 'bd7acbea-c1b1-46c2-aed5-3ad5abb8ba',
+    //         token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    //         accessDate: '1/3/2022 3:06 PM GMT+1',
+    //         expires: '3/3/2022 3:06 PM GMT+1',
+    //         platform: 'Instagram',
+    //         url: 'www.instagram.com',
+    //         isExpired: true,
+    //     },
+    //     {
+    //         id: 'bd7acbea-c1b1-46c2-aed5-3ad5ab28ba',
+    //         token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    //         accessDate: '1/3/2022 3:06 PM GMT+1',
+    //         expires: '3/3/2022 3:06 PM GMT+1',
+    //         platform: 'Tiktok',
+    //         url: 'www.tiktok.com',
+    //         isExpired: true,
+    //     },
+    //     {
+    //         id: 'bd7acbea-c1b1-46c2-aed5-3adabb28ba',
+    //         token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    //         accessDate: '1/3/2022 3:06 PM GMT+1',
+    //         expires: '3/3/2022 3:06 PM GMT+1',
+    //         platform: 'Zoom',
+    //         url: 'www.zoom.com',
+    //         isExpired: true,
+    //     },
+    //     {
+    //         id: 'bd7acbea-c1b1-46c2-aed5-3a5abb28ba',
+    //         token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    //         accessDate: '1/3/2022 3:06 PM GMT+1',
+    //         expires: '3/3/2022 3:06 PM GMT+1',
+    //         platform: 'Spotify',
+    //         url: 'www.spotify.com',
+    //         isExpired: true,
+    //     },
+    // ]
 
     const refreshHistory = () => {
         // console.log('refreshing')
@@ -148,7 +148,7 @@ const HistoryTab = () => {
                     refreshing={isRefreshing}
                     onRefresh={refreshHistory}
                     style={{ marginBottom: '32%', marginTop: '3%' }}
-                    data={history}
+                    data={history.reverse()}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => <HistoryItem {...item} />}
                     extraData={history}

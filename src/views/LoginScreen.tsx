@@ -36,7 +36,11 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
         if (username.length > 0) {
             setIsLoading(true)
             axios
-                .get(`http://10.3.128.231:8080/api/login/${username}`)
+                .get(`http://10.3.128.231:8080/api/login/${username}`, {
+                    headers: {
+                        Referer: 'Direct Mobile',
+                    },
+                })
                 .then(
                     /*async*/ res => {
                         console.log(res.data)

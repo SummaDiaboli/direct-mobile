@@ -1,11 +1,23 @@
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useContext } from 'react'
+import { FlatList, LogBox, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { UserDataContext } from '../../contexts/UserDataContext'
 import ActiveToken from '../../components/ActiveToken'
 import ExpiredToken from '../../components/ExpiredToken'
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
+import { ActivityIndicator } from 'react-native-paper'
+import HistoryItem from '../../components/HistoryItem'
+
+type AuthToken = {
+    id: string
+    token: string
+    user_id: string
+    referer: string
+    created: string
+    expires: string
+}
 
 const HomeTab = () => {
     const userData = useContext(UserDataContext)
@@ -14,75 +26,63 @@ const HomeTab = () => {
         navigation.navigate('Edit Profile', { data: userData })
     }
 
-    const activeTokens = [
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28b',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Google',
-            url: 'www.google.com',
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28a',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Google',
-            url: 'www.google.com',
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb8ba',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Google',
-            url: 'www.google.com',
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad5abb28ba',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Google',
-            url: 'www.google.com',
-        },
-    ]
+    const [magicToken, setMagicToken] = useState('')
+    const [isTokenLoading, setIsTokenLoading] = useState(false)
+    // const [returnText, setreturnText] = useState('')
+    const [history, setHistory] = useState<AuthToken[]>([])
+    const [isError, setIsError] = useState(false)
+    const [isHistoryLoading, setisHistoryLoading] = useState(false)
 
-    const expiredTokens = [
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28b',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Google',
-            url: 'www.google.com',
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28a',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Google',
-            url: 'www.google.com',
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb8ba',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Google',
-            url: 'www.google.com',
-        },
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad5abb28ba',
-            token: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            accessDate: '1/3/2022 3:06 PM GMT+1',
-            expires: '3/3/2022 3:06 PM GMT+1',
-            platform: 'Google',
-            url: 'www.google.com',
-        },
-    ]
+    const fetchMagicToken = () => {
+        setIsTokenLoading(true)
+        axios
+            .get(`http://10.3.128.231:8080/api/latest-token/${userData.id}`)
+            .then(res => {
+                // const token = res.data.token
+                if (res.data.token) {
+                    setMagicToken(res.data.token)
+                } else {
+                    setMagicToken('')
+                }
+                // setreturnText(`${JSON.stringify(res.data)}`)
+                setIsTokenLoading(false)
+            })
+            .catch(err => {
+                console.log(err)
+                setIsTokenLoading(false)
+            })
+    }
+
+    const fetchHistory = () => {
+        setisHistoryLoading(true)
+        axios
+            .get(
+                `http://10.3.128.231:8080/api/authed-websites/${userData.id}`,
+            )
+            .then(res => {
+                if (res.status !== 200) {
+                    setIsError(true)
+                } else {
+                    console.log(res.data)
+                    const responseData = res.data
+                    setHistory(responseData.websites)
+                }
+                setisHistoryLoading(false)
+                console.log(history)
+            })
+    }
+
+    // useEffect(() => {
+    // }, [])
+
+    useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    }, [])
+
+    useEffect(() => {
+        fetchHistory()
+        fetchMagicToken()
+    }, [userData])
 
     return (
         <View style={styles.container}>
@@ -93,12 +93,13 @@ const HomeTab = () => {
             />
 
             <ScrollView
+                // overScrollMode=
                 style={{
-                    minHeight: '100%',
+                    minHeight: '80%',
                     paddingVertical: '2%',
                     marginBottom: '18%',
                 }}>
-                <View style={{ marginBottom: 10 }}>
+                <View>
                     <View style={styles.content}>
                         <View
                             style={{
@@ -108,6 +109,90 @@ const HomeTab = () => {
                                 paddingHorizontal: 10,
                             }}>
                             <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    // marginHorizontal: 10,
+                                }}>
+                                <Text
+                                    style={{
+                                        fontWeight: 'bold',
+                                        fontSize: 20,
+                                        color: 'black',
+                                        paddingVertical: 10,
+                                    }}>
+                                    Current Magic Token
+                                </Text>
+
+                                <FontAwesome
+                                    name="rotate-right"
+                                    size={20}
+                                    onPress={fetchMagicToken}
+                                />
+                            </View>
+                            <View>
+                                {isTokenLoading ? (
+                                    <ActivityIndicator
+                                        size={'large'}
+                                        color="gray"
+                                    />
+                                ) : magicToken.length > 0 ? (
+                                    magicToken.length <= 6 ? (
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                justifyContent: 'center',
+                                            }}>
+                                            <Text
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    letterSpacing: 20,
+                                                    fontSize: 40,
+                                                    fontWeight: 'bold',
+                                                }}>
+                                                {magicToken}
+                                            </Text>
+                                        </View>
+                                    ) : (
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                justifyContent: 'center',
+                                            }}>
+                                            <Text
+                                                style={{
+                                                    marginVertical: 10,
+                                                }}>
+                                                QR Code found, please scan using
+                                                this device
+                                            </Text>
+                                        </View>
+                                    )
+                                ) : (
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'center',
+                                            // alignItems: 'center',
+                                            // marginVertical: ,
+                                        }}>
+                                        <Text
+                                            style={{
+                                                fontWeight: 'bold',
+                                                fontSize: 40,
+                                            }}>
+                                            N/A
+                                        </Text>
+                                        {/* <View>
+                                        <Text>{returnText}</Text>
+                                    </View> */}
+                                    </View>
+                                )}
+                            </View>
+                            {/* <View
                                 style={{
                                     flexDirection: 'row',
                                     justifyContent: 'space-between',
@@ -140,16 +225,20 @@ const HomeTab = () => {
                                 <Text style={{ color: 'gray' }}>
                                     {userData.email}
                                 </Text>
-                            </Text>
+                            </Text> */}
                         </View>
                     </View>
                 </View>
 
-                <View style={{ marginBottom: 10 }}>
+                <View>
                     <View
                         style={[
                             styles.content,
-                            { flexDirection: 'row', alignItems: 'center' },
+                            {
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                            },
                         ]}>
                         <Text
                             style={{
@@ -158,29 +247,45 @@ const HomeTab = () => {
                                 fontSize: 18,
                                 fontWeight: '500',
                             }}>
-                            Recent Active Tokens
+                            Recent Web Tokens
                         </Text>
 
                         <FontAwesome
+                            name="rotate-right"
+                            size={20}
+                            onPress={fetchHistory}
+                        />
+
+                        {/* <FontAwesome
                             name="angle-right"
                             size={18}
                             style={{ marginLeft: 5 }}
                             color={'black'}
-                        />
+                        /> */}
                     </View>
 
-                    <View style={styles.content}>
-                        <FlatList
-                            showsHorizontalScrollIndicator={false}
-                            data={activeTokens}
-                            keyExtractor={item => item.id}
-                            horizontal
-                            renderItem={({ item }) => <ActiveToken {...item} />}
-                        />
+                    <View style={{ marginHorizontal: 10 }}>
+                        {isHistoryLoading ? (
+                            <ActivityIndicator
+                                color="gray"
+                                size={'large'}
+                                style={{ marginVertical: 10 }}
+                            />
+                        ) : (
+                            <FlatList
+                                showsHorizontalScrollIndicator={false}
+                                // refreshing={isHistoryLoading}
+                                data={history.slice(-3).reverse()}
+                                keyExtractor={item => item.id}
+                                renderItem={({ item }) => (
+                                    <HistoryItem {...item} />
+                                )}
+                            />
+                        )}
                     </View>
                 </View>
 
-                <View>
+                {/* <View>
                     <View
                         style={[
                             styles.content,
@@ -214,7 +319,7 @@ const HomeTab = () => {
                             )}
                         />
                     </View>
-                </View>
+                </View> */}
             </ScrollView>
         </View>
     )

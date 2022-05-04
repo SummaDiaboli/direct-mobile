@@ -24,7 +24,7 @@ const ActiveToken: React.FC<Props> = ({
             key={id}
             style={{
                 backgroundColor: 'white',
-                height: 130,
+                height: 250,
                 width: 280,
                 paddingVertical: 10,
                 paddingHorizontal: 10,

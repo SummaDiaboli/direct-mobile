@@ -6,11 +6,13 @@ import {
     TextInput,
     View,
 } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { UserDataContext } from '../../contexts/UserDataContext'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../utils/routes'
+import axios from 'axios'
+import moment from 'moment'
 // import { TextInput } from 'react-native-paper'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Settings'>
@@ -20,12 +22,49 @@ const EditProfileScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     const id = userData.id
     const [username, setUsername] = useState(userData.username)
     const [email, setEmail] = useState(userData.email)
-    const [tokenDuration, setTokenDuration] = useState(5)
+    const [tokenDuration, setTokenDuration] = useState<unknown>()
     const [accountCreated, setAccountCreated] = useState('May 20, 2022')
+    const [response, setResponse] = useState('')
+
+    const fetchUserDetails = () => {
+        axios.get(`http://10.3.128.231:8080/api/users/${id}`).then(res => {
+            setResponse(`${JSON.stringify(res.data)}`)
+            if (res.data) {
+                setUsername(res.data.username)
+                setEmail(res.data.email)
+                setAccountCreated(
+                    moment(res.data.created).format('DD MMMM YYYY'),
+                )
+                setTokenDuration(res.data.tokenDuration)
+            } else {
+                setAccountCreated('')
+                setTokenDuration(7)
+            }
+        })
+    }
+
+    const updateUserDetails = () => {
+        axios
+            .patch(`http://10.3.128.231:8080/api/users/${id}`, {
+                email,
+                token_duration: tokenDuration,
+            })
+            .then(res => {
+                setResponse(`${JSON.stringify(res.data)}`)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    useEffect(() => {
+        fetchUserDetails()
+    }, [])
 
     return (
         <SafeAreaView>
             <ScrollView style={styles.container}>
+                <Text>{response}</Text>
                 <View style={{ marginBottom: '5%' }}>
                     <Text style={styles.title}>ID</Text>
                     <TextInput
@@ -40,6 +79,7 @@ const EditProfileScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                     <TextInput
                         style={[styles.inputField]}
                         defaultValue={username}
+                        editable={false}
                         value={username}
                         onChangeText={setUsername}
                     />
@@ -64,7 +104,7 @@ const EditProfileScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                         defaultValue="5"
                         style={[styles.inputField]}
                         keyboardType="number-pad"
-                        value={tokenDuration.toString()}
+                        value={`${tokenDuration}`}
                         onChangeText={e => setTokenDuration(+e)}
                     />
                 </View>
@@ -79,6 +119,7 @@ const EditProfileScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                 </View>
 
                 <Pressable
+                    onPress={updateUserDetails}
                     style={({ pressed }) => [
                         styles.button,
                         {

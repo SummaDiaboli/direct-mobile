@@ -58,7 +58,7 @@ Props) => {
                         style={{
                             color: 'black',
                             fontSize: 22,
-                            marginBottom: 10,
+                            marginBottom: 15,
                             paddingRight: 20,
                             fontWeight: 'bold',
                         }}>
@@ -75,17 +75,17 @@ Props) => {
 
             <Text
                 style={{
-                    fontSize: 10,
-                    marginBottom: 5,
+                    fontSize: 12,
+                    marginBottom: 10,
                     color: 'black',
-                    textDecorationLine: 'underline',
+                    // textDecorationLine: 'underline',
                     fontStyle: 'italic',
                 }}>
                 {token}
             </Text>
 
-            <Text style={{ fontSize: 13, marginBottom: 5 }}>
-                <Text style={{ color: 'black' }}>Last Accessed:</Text>{' '}
+            <Text style={{ fontSize: 13, marginBottom: 10 }}>
+                <Text style={{ color: 'black' }}>Created:</Text>{' '}
                 {moment(created).format('DD MMMM YYYY')}
             </Text>
 
