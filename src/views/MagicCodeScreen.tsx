@@ -16,6 +16,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../utils/routes'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Config from 'react-native-config'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Magic Code'>
 
@@ -96,7 +97,7 @@ const MagicCodeScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         // console.log(id);
         // console.log('here')
         axios
-            .post('http://10.3.128.231:8080/api/confirm-token', {
+            .post(`${Config.API}confirm-token`, {
                 user_id: id,
                 token: code,
             })
@@ -136,7 +137,7 @@ const MagicCodeScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     const resendCode = () => {
         setIsLoading(true)
         axios
-            .get(`http://10.3.128.231:8080/api/resend-token/${id}`)
+            .get(`${Config.API}resend-token/${id}`)
             .then(res => {
                 if (res.status !== 201) {
                     setIsError(true)

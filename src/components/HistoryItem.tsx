@@ -68,9 +68,9 @@ Props) => {
                     {/* <Text style={{ fontSize: 12 }}>{url}</Text> */}
                 </View>
 
-                {!isExpired ? (
+                {/* {!isExpired ? (
                     <FontAwesome name="rotate-right" size={16} />
-                ) : null}
+                ) : null} */}
             </View>
 
             <Text

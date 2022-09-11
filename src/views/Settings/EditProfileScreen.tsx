@@ -13,6 +13,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../utils/routes'
 import axios from 'axios'
 import moment from 'moment'
+import Config from 'react-native-config'
 // import { TextInput } from 'react-native-paper'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Settings'>
@@ -27,8 +28,8 @@ const EditProfileScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     const [response, setResponse] = useState('')
 
     const fetchUserDetails = () => {
-        axios.get(`http://10.3.128.231:8080/api/users/${id}`).then(res => {
-            setResponse(`${JSON.stringify(res.data)}`)
+        axios.get(`${Config.API}users/${id}`).then(res => {
+            // setResponse(`${JSON.stringify(res.data)}`)
             if (res.data) {
                 setUsername(res.data.username)
                 setEmail(res.data.email)
@@ -40,12 +41,14 @@ const EditProfileScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                 setAccountCreated('')
                 setTokenDuration(7)
             }
+        }).catch(err => {
+            console.log(err)
         })
     }
 
     const updateUserDetails = () => {
         axios
-            .patch(`http://10.3.128.231:8080/api/users/${id}`, {
+            .patch(`${Config.API}users/${id}`, {
                 email,
                 token_duration: tokenDuration,
             })
@@ -64,7 +67,7 @@ const EditProfileScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     return (
         <SafeAreaView>
             <ScrollView style={styles.container}>
-                <Text>{response}</Text>
+                {/* <Text>{response}</Text> */}
                 <View style={{ marginBottom: '5%' }}>
                     <Text style={styles.title}>ID</Text>
                     <TextInput

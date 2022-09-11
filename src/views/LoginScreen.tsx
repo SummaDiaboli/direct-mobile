@@ -14,6 +14,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../utils/routes'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
+import Config from 'react-native-config'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>
 
@@ -36,7 +37,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
         if (username.length > 0) {
             setIsLoading(true)
             axios
-                .get(`http://10.3.128.231:8080/api/login/${username}`, {
+                .get(`${Config.API}login/${username}`, {
                     headers: {
                         Referer: 'Direct Mobile',
                     },

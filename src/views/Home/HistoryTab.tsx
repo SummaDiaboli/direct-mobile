@@ -6,6 +6,7 @@ import ActiveToken from '../../components/ActiveToken'
 import ExpiredToken from '../../components/ExpiredToken'
 import HistoryItem from '../../components/HistoryItem'
 import axios from 'axios'
+import Config from 'react-native-config'
 
 type AuthToken = {
     id: string
@@ -104,7 +105,7 @@ const HistoryTab = () => {
 
     const fetchHistory = () => {
         axios
-            .get(`http://10.3.128.231:8080/api/authed-websites/${userData.id}`)
+            .get(`${Config.API}authed-websites/${userData.id}`)
             .then(res => {
                 if (res.status !== 200) {
                     setIsError(true)

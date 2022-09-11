@@ -5,6 +5,7 @@ import { UserDataContext } from '../../contexts/UserDataContext'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import axios from 'axios'
+import Config from 'react-native-config'
 
 const QRTab = () => {
     const userData = useContext(UserDataContext)
@@ -16,7 +17,7 @@ const QRTab = () => {
         setScanText("Code Identified. Scanning...")
         setScanned(true)
         axios
-            .post('http://10.3.128.231:8080/api/confirm-qr', {
+            .post(`${Config.API}confirm-qr`, {
                 user_id: userData.id,
                 token: e.data,
             })

@@ -13,6 +13,7 @@ import React, { useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../utils/routes'
 import axios, { AxiosResponse } from 'axios'
+import Config from 'react-native-config'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Sign Up'>
 type Response = {
@@ -41,7 +42,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }: Props) => {
             setIsLoading(true)
             axios
                 .post(
-                    'http://10.3.128.231:8080/api/users',
+                    `${Config.API}users`,
                     {
                         username,
                         email, // "website": "Direct Security Official"

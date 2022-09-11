@@ -1,4 +1,12 @@
-import { FlatList, LogBox, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+    FlatList,
+    LogBox,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -9,6 +17,7 @@ import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 import { ActivityIndicator } from 'react-native-paper'
 import HistoryItem from '../../components/HistoryItem'
+import Config from 'react-native-config'
 
 type AuthToken = {
     id: string
@@ -36,7 +45,7 @@ const HomeTab = () => {
     const fetchMagicToken = () => {
         setIsTokenLoading(true)
         axios
-            .get(`http://10.3.128.231:8080/api/latest-token/${userData.id}`)
+            .get(`${Config.API}latest-token/${userData.id}`)
             .then(res => {
                 // const token = res.data.token
                 if (res.data.token) {
@@ -56,9 +65,7 @@ const HomeTab = () => {
     const fetchHistory = () => {
         setisHistoryLoading(true)
         axios
-            .get(
-                `http://10.3.128.231:8080/api/authed-websites/${userData.id}`,
-            )
+            .get(`${Config.API}authed-websites/${userData.id}`)
             .then(res => {
                 if (res.status !== 200) {
                     setIsError(true)
@@ -70,13 +77,14 @@ const HomeTab = () => {
                 setisHistoryLoading(false)
                 console.log(history)
             })
+            .catch(err => console.log(err))
     }
 
     // useEffect(() => {
     // }, [])
 
     useEffect(() => {
-        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested'])
     }, [])
 
     useEffect(() => {
@@ -191,6 +199,9 @@ const HomeTab = () => {
                                     </View> */}
                                     </View>
                                 )}
+                                {/* <Text>
+                                    {Config.API}here
+                                </Text> */}
                             </View>
                             {/* <View
                                 style={{
